@@ -11,7 +11,14 @@ class SparkAPI_MemcacheCache implements SparkAPI_CacheInterface {
 		$this->host = $host;
 		$this->port = $port;
 		$this->cache = new Memcache;
-		$this->cache->connect($host, $port);
+		if (is_array($host)) {
+			foreach ($host as $h) {
+				$this->cache->addServer($h, $port);
+			}
+		}
+		else {
+			$this->cache->addServer($host, $port);
+		}
 	}
 
 	function get($key) {
